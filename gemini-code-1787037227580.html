@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>AR Flying Bird Lab</title>
+    <!-- โหลด A-Frame และ AR.js -->
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script>
+      // Component สำหรับจัดการการคลิกเพื่อนกบินให้เร็วขึ้น
+      AFRAME.registerComponent('speed-up', {
+        init: function () {
+          var el = this.el;
+          el.addEventListener('click', function () {
+            var anim = el.getAttribute('animation');
+            if (anim) {
+              var currentDur = anim.dur;
+              var newDur = Math.max(currentDur / 1.5, 300); 
+              el.setAttribute('animation', {dur: newDur});
+              console.log('Bird speed increased! New duration:', newDur);
+            }
+          });
+        }
+      });
+    </script>
+  </head>
+  <body style="margin: 0px; overflow: hidden;">
+    <a-scene embedded arjs>
+      <!-- แสงสว่างในฉาก -->
+      <a-light type="ambient" color="#ffffff" intensity="1"></a-light>
+      <a-light type="directional" position="1 3 2" color="#ffffff" intensity="1.2"></a-light>
+
+      <!-- นกตัวที่ 1 -->
+      <a-entity position="-1 1 -3" speed-up class="clickable"
+                animation="property: position; to: 1 2 -3; dir: alternate; dur: 2500; loop: true">
+        <!-- เปลี่ยนลิงก์ src เป็นไฟล์โมเดล 3D นกของคุณ (.glb หรือ .gltf) -->
+        <a-gltf-model src="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf" scale="0.5 0.5 0.5"></a-gltf-model>
+      </a-entity>
+
+      <!-- นกตัวที่ 2 -->
+      <a-entity position="0 1.5 -4" speed-up class="clickable"
+                animation="property: position; to: -1 0.5 -4; dir: alternate; dur: 3000; loop: true">
+        <a-gltf-model src="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf" scale="0.4 0.4 0.4"></a-gltf-model>
+      </a-entity>
+
+      <!-- นกตัวที่ 3 -->
+      <a-entity position="1 1 -3.5" speed-up class="clickable"
+                animation="property: position; to: 0 2 -3.5; dir: alternate; dur: 2000; loop: true">
+        <a-gltf-model src="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf" scale="0.6 0.6 0.6"></a-gltf-model>
+      </a-entity>
+
+      <!-- กล้องและตัวตรวจจับการคลิก (Raycaster) -->
+      <a-camera-static cursor="rayOrigin: mouse;" raycaster="objects: .clickable"></a-camera-static>
+    </a-scene>
+  </body>
+</html>
